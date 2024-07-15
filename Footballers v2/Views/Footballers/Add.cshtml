@@ -1,0 +1,40 @@
+﻿
+
+@model AddFootballerViewModel
+
+<h1>Add Footballer</h1>
+
+<form method="post">
+    <label asp-for="FirstName"></label>
+    <input asp-for="FirstName" />
+    <span asp-validation-for="FirstName"></span>
+
+    <label asp-for="LastName"></label>
+    <input asp-for="LastName" />
+    <span asp-validation-for="LastName"></span>
+
+    <label asp-for="Gender"></label>
+    <input asp-for="Gender" />
+    <span asp-validation-for="Gender"></span>
+
+    <label asp-for="Birthday"></label>
+    <input type="date" asp-for="Birthday" />
+    <span asp-validation-for="Birthday"></span>
+
+    <label asp-for="TeamName"></label>
+    <input asp-for="TeamName" />
+    <span asp-validation-for="TeamName"></span>
+
+    <label asp-for="Country"></label>
+    <div class="dropdown">
+        <input type="text" readonly asp-for="Country" />
+        <select onchange="this.previousElementSibling.value=this.value; this.previousElementSibling.focus()">
+            <option>Россия</option>
+            <option>США</option>
+            <option>Италия</option>
+        </select>
+    </div>
+    <span asp-validation-for="Country"></span>
+
+    <input class=" btn btn-primary" type="submit" value="Отправить" />
+</form>

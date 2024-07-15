@@ -1,0 +1,40 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model List<Footballer>
+
+<table class="table">
+    <thead>
+        <tr>
+            <td>Имя</td>
+            <td>Фамилия</td>
+            <td>Пол</td>
+            <td>Дата рождения</td>
+            <td>Команда</td>
+            <td>Страна</td>
+            <td> </td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var footballer in Model)
+        {
+            <tr>
+                <td>@footballer.FirstName</td>
+                <td>@footballer.LastName</td>
+                <td>@footballer.Gender</td>
+                <td>@footballer.Birthday</td>
+                <td>@footballer.TeamName</td>
+                <td>@footballer.Country</td>
+                <td>
+                    <a class="btn btn-primary" href="/footballers/edit/@footballer.Id">Править</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
