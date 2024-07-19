@@ -21,10 +21,13 @@ body {
   margin-bottom: 60px;
 }
 
+.radio_button_content:first-of-type {
+    margin-right: 30px;
+}
 
-
-
-
+.radio_button{
+    display: flex;
+}
 
 
 

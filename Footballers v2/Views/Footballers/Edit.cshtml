@@ -1,45 +1,63 @@
-﻿
-
+﻿@using Footballers_v2.Enums
 @model Footballer
+@{ var TeamNames = @ViewData["ListTeamNames"] as List<string>;}
 
 <h1>Edit Footballer</h1>
 
-<h1>Футболисты</h1>
 
 @if (Model is null)
 {
     <p>Такого футболиста у нас нету</p>
 }
+else
+{
+    <form method="post">
+        <label asp-for="Id"></label>
+        <input asp-for="Id" readonly />
 
-<form method="post">
-    <label asp-for="Id"></label>
-    <input asp-for="Id" readonly />
-    <span asp-validation-for="Id"></span>
+        <label asp-for="FirstName"></label>
+        <input asp-for="FirstName" />
+        <span asp-validation-for="FirstName"></span>
 
-    <label asp-for="FirstName"></label>
-    <input asp-for="FirstName" />
-    <span asp-validation-for="FirstName"></span>
+        <label asp-for="LastName"></label>
+        <input asp-for="LastName" />
+        <span asp-validation-for="LastName"></span>
 
-    <label asp-for="LastName"></label>
-    <input asp-for="LastName" />
-    <span asp-validation-for="LastName"></span>
+        <label asp-for="Gender"></label>
+        <div class="radio_button">
+            <div class="radio_button_content">
+                <input type="radio" asp-for="Gender" name="Gender" value="Мужчина" />
+                <span>Мужчина</span>
+            </div>
+            <div class="radio_button_content">
+                <input type="radio" asp-for="Gender" name="Gender" value="Женщина" />
+                <span>Женщина</span>
+            </div>
+        </div>
+        <span asp-validation-for="Gender"></span>
 
-    <label asp-for="Gender"></label>
-    <input asp-for="Gender" />
-    <span asp-validation-for="Gender"></span>
+        <label asp-for="Birthday"></label>
+        <input type="date" asp-for="Birthday" />
+        <span asp-validation-for="Birthday"></span>
 
-    <label asp-for="Birthday"></label>
-    <input type="date" asp-for="Birthday" />
-    <span asp-validation-for="Birthday"></span>
+        <label asp-for="TeamName"></label>
+        <div class="dropdown">
+            <input type="text" asp-for="TeamName" />
+            <select onchange="this.previousElementSibling.value=this.value; this.previousElementSibling.focus()">
+                @if (@TeamNames is not null)
+                    @foreach (string el in @TeamNames)
+                    {
+                        <option>@el</option>
+                    }
+            </select>
+        </div>
+        <span asp-validation-for="TeamName"></span>
 
-    <label asp-for="TeamName"></label>
-    <input asp-for="TeamName" />
-    <span asp-validation-for="TeamName"></span>
+        <label asp-for="Country"></label>
+        <select asp-for="Country" asp-items="@Html.GetEnumSelectList(typeof(Country))"></select>
+        <span asp-validation-for="Country"></span>
 
-    <label asp-for="Country"></label>
-    <input asp-for="Country" />
-    <span asp-validation-for="Country"></span>
-
-    <input type="submit" value="Отправить" />
-    <input class="btn btn-danger" type="submit" asp-action="Delete" asp-controller="Footballers" value="Удалить" />
-</form>
+        <input type="submit" value="Отправить" />
+        <input class="btn btn-danger" type="submit" asp-action="Delete" asp-controller="Footballers" value="Удалить" />
+    </form>
+}

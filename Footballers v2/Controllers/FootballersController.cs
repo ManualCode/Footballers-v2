@@ -1,4 +1,5 @@
 ﻿using Footballers_v2.Data;
+using Footballers_v2.Enums;
 using Footballers_v2.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,30 +14,34 @@ namespace Footballers_v2.Controllers
         { 
             this.dbContext = dbContext;
         }
+
         [HttpGet]
-        public IActionResult Add()
+        public async Task<IActionResult> Add()
         {
+            ViewData["ListTeamNames"] = await dbContext.Footballers
+                .Select(x => x.TeamName).Distinct().ToListAsync();
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> Add(AddFootballerViewModel viewModel)
         {
-            var allowed_countries = new string[] { "Россия", "США", "Италия" };
-            if (!allowed_countries.Any(c => c == viewModel.Country))
-                ModelState.AddModelError("Country", "Необходимо выбрать страну из предложенных");
-            if (!ModelState.IsValid) return View("Add");
+            if (!ModelState.IsValid) 
+            {
+                ViewData["ListTeamNames"] = await dbContext.Footballers
+                .Select(x => x.TeamName).Distinct().ToListAsync();
+                return View("Add");
+            }
 
-            var footballer = new Footballer()
+            await dbContext.Footballers.AddAsync(new Footballer()
             {
                 FirstName = viewModel.FirstName,
                 LastName = viewModel.LastName,
                 Gender = viewModel.Gender,
                 Birthday = viewModel.Birthday,
                 TeamName = viewModel.TeamName,
-                Country = viewModel.Country
-            };
-            await dbContext.Footballers.AddAsync(footballer);
+                Country = ((Country)int.Parse(viewModel.Country)).ToString()
+            });
             await dbContext.SaveChangesAsync();
 
             return Redirect("/");
@@ -54,13 +59,20 @@ namespace Footballers_v2.Controllers
         public async Task<IActionResult> Edit(Guid id)
         {
             var footballer = await dbContext.Footballers.FindAsync(id);
-
+            ViewData["ListTeamNames"] = await dbContext.Footballers
+                .Select(x => x.TeamName).Distinct().ToListAsync();
             return View(footballer);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(Footballer viewModel)
+        public async Task<IActionResult> Edit(AddFootballerViewModel viewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                ViewData["ListTeamNames"] = await dbContext.Footballers
+                .Select(x => x.TeamName).Distinct().ToListAsync();
+                return View(viewModel);
+            }
             var footballer = await dbContext.Footballers.FindAsync(viewModel.Id);
             if (footballer is not null)
             {
@@ -69,8 +81,9 @@ namespace Footballers_v2.Controllers
                 footballer.Gender = viewModel.Gender;
                 footballer.Birthday = viewModel.Birthday;
                 footballer.TeamName = viewModel.TeamName;
-                footballer.Country = viewModel.Country;
-                
+                footballer.Country = ((Country)int.Parse(viewModel.Country)).ToString();
+
+
                 await dbContext.SaveChangesAsync();
             }
             return RedirectToAction("List", "Footballers");

@@ -1,6 +1,6 @@
-﻿
-
+﻿@using Footballers_v2.Enums
 @model AddFootballerViewModel
+@{ var TeamNames = @ViewData["ListTeamNames"] as List<string>;}
 
 <h1>Add Footballer</h1>
 
@@ -14,7 +14,16 @@
     <span asp-validation-for="LastName"></span>
 
     <label asp-for="Gender"></label>
-    <input asp-for="Gender" />
+    <div class="radio_button">
+        <div class="radio_button_content">
+            <input type="radio" asp-for="Gender" name="Gender" value="Мужчина" />
+            <span>Мужчина</span>
+        </div>
+        <div class="radio_button_content">
+            <input type="radio" asp-for="Gender" name="Gender" value="Женщина" />
+            <span>Женщина</span>
+        </div>
+     </div>
     <span asp-validation-for="Gender"></span>
 
     <label asp-for="Birthday"></label>
@@ -22,18 +31,19 @@
     <span asp-validation-for="Birthday"></span>
 
     <label asp-for="TeamName"></label>
-    <input asp-for="TeamName" />
+    <div class="dropdown">
+        <input type="text" asp-for="TeamName" />
+        <select onchange="this.previousElementSibling.value=this.value; this.previousElementSibling.focus()">
+            @if (@TeamNames is not null) 
+                @foreach (string el in @TeamNames){
+                    <option>@el</option>
+                 }
+        </select>
+    </div>
     <span asp-validation-for="TeamName"></span>
 
     <label asp-for="Country"></label>
-    <div class="dropdown">
-        <input type="text" readonly asp-for="Country" />
-        <select onchange="this.previousElementSibling.value=this.value; this.previousElementSibling.focus()">
-            <option>Россия</option>
-            <option>США</option>
-            <option>Италия</option>
-        </select>
-    </div>
+    <select asp-for="Country" asp-items="@Html.GetEnumSelectList(typeof(Country))"></select>
     <span asp-validation-for="Country"></span>
 
     <input class=" btn btn-primary" type="submit" value="Отправить" />
