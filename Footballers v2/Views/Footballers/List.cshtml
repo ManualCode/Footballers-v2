@@ -12,7 +12,7 @@
             <td></td>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="test1">
         @foreach (var footballer in Model)
         {
             <tr>
@@ -26,9 +26,57 @@
                     <a class="btn btn-primary" href="/footballers/edit/@footballer.Id">Править</a>
                 </td>
             </tr>
+            <tr hidden class="test"></tr>
         }
     </tbody>
 </table>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
+<script>
+    //let td_FirstName = document.createElement("td");
+    //document.getElementById("test").appendChild(td_FirstName);
+    const hubConnection = new signalR.HubConnectionBuilder()
+        .withUrl("/football").build();
+
+    hubConnection.start()
+        .then(function () {
+            console.log('connection started');
+        })
+        .catch(function (err) {
+            return console.error(err.toString());
+        });
+
+    hubConnection.on("Receive", function (footballer) {
+        let tr = document.createElement("tr");
+        tr.className = "test";
+
+
+        let td_FirstName = document.createElement("td");
+        td_FirstName.textContent = footballer.firstName;
+        tr.appendChild(td_FirstName);
+
+        let td_LastName = document.createElement("td");
+        td_LastName.textContent = footballer.lastName;
+        tr.appendChild(td_LastName);
+
+        let td_Gender = document.createElement("td");
+        td_Gender.textContent = footballer.gender;
+        tr.appendChild(td_Gender);
+
+        let td_Birthday = document.createElement("td");
+        td_Birthday.textContent = footballer.birthday;
+        tr.appendChild(td_Birthday);
+
+        let td_TeamName = document.createElement("td");
+        td_TeamName.textContent = footballer.teamName;
+        tr.appendChild(td_TeamName);
+
+        let td_Country = document.createElement("td");
+        td_Country.textContent = footballer.country;
+        tr.appendChild(td_Country);
+
+        document.getElementById("test1").appendChild(tr);
+    });
+</script>
 
 

@@ -1,26 +1,31 @@
 using Footballers_v2.Data;
+using Footballers_v2.Hubs;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+//SIGNAL R
+builder.Services.AddSignalR();
+
 builder.Services.AddControllersWithViews();
 
+//NPGSQL
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 options.UseNpgsql(builder.Configuration.GetConnectionString("FootballerPortal")));
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+
+app.MapHub<FootballersHub>("/football");
 
 app.UseRouting();
 
