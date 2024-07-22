@@ -7,6 +7,10 @@
 
 <form method="post">
     <div class="el">
+        <input hidden asp-for="Id" value="@Guid.NewGuid()"/>
+    </div>
+
+    <div class="el">
         <label asp-for="FirstName"></label>
         <input asp-for="FirstName" />
         <span asp-validation-for="FirstName"></span>
@@ -43,7 +47,7 @@
                 @if (@TeamNames is not null)
                     @foreach (string el in @TeamNames)
                     {
-                        <option>@el</option>
+                        <option selected>@el</option>
                     }
             </select>
         </div>
@@ -65,6 +69,7 @@
         .build();
     document.getElementById("sendBtn").addEventListener("click", function () {
         let formData = {
+            id: document.querySelector("input[name='Id']").value,
             firstName: document.querySelector("input[name='FirstName']").value,
             lastName: document.querySelector("input[name='LastName']").value,
             gender: document.querySelector("input[name='Gender']:checked").value,

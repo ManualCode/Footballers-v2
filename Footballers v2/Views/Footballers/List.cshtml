@@ -75,6 +75,14 @@
         td_Country.textContent = footballer.country;
         tr.appendChild(td_Country);
 
+        let a_button = document.createElement("a");
+        a_button.className = "btn btn-primary";
+        a_button.href = `/footballers/edit/${footballer.id}`;
+        a_button.textContent = "Править";
+        let td_button = document.createElement("td");
+        td_button.appendChild(a_button);
+        tr.appendChild(td_button);
+
         document.getElementById("test1").appendChild(tr);
     });
 </script>

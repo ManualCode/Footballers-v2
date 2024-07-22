@@ -35,6 +35,7 @@ namespace Footballers_v2.Controllers
 
             await dbContext.Footballers.AddAsync(new Footballer()
             {
+                Id = viewModel.Id,
                 FirstName = viewModel.FirstName,
                 LastName = viewModel.LastName,
                 Gender = viewModel.Gender,
@@ -65,7 +66,7 @@ namespace Footballers_v2.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(AddFootballerViewModel viewModel)
+        public async Task<IActionResult> Edit(Footballer viewModel)
         {
             if (!ModelState.IsValid)
             {
