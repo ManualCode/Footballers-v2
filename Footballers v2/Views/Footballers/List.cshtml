@@ -1,6 +1,6 @@
 ﻿@model List<Footballer>
 
-<table class="table">
+<table>
     <thead>
         <tr>
             <td>Имя</td>
@@ -12,78 +12,79 @@
             <td></td>
         </tr>
     </thead>
-    <tbody id="test1">
+    <tbody id="tbody-of-footballers">
         @foreach (var footballer in Model)
         {
-            <tr>
+            <tr id="@footballer.Id">
                 <td>@footballer.FirstName</td>
                 <td>@footballer.LastName</td>
                 <td>@footballer.Gender</td>
                 <td>@footballer.Birthday</td>
                 <td>@footballer.TeamName</td>
                 <td>@footballer.Country</td>
-                <td>
-                    <a class="btn btn-primary" href="/footballers/edit/@footballer.Id">Править</a>
-                </td>
+                <td><a class="btn btn-primary" href="/footballers/edit/@footballer.Id">Править</a></td>
             </tr>
-            <tr hidden class="test"></tr>
         }
     </tbody>
 </table>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
 <script>
-    //let td_FirstName = document.createElement("td");
-    //document.getElementById("test").appendChild(td_FirstName);
     const hubConnection = new signalR.HubConnectionBuilder()
-        .withUrl("/football").build();
+        .withUrl("/football")
+        .build();
 
     hubConnection.start()
         .then(function () {
-            console.log('connection started');
+            console.log('Connection started');
         })
         .catch(function (err) {
             return console.error(err.toString());
         });
 
     hubConnection.on("Receive", function (footballer) {
+        footballer.birthday = footballer.birthday.split('-').reverse().join('.')
+        let val = Object.values(footballer);
         let tr = document.createElement("tr");
-        tr.className = "test";
-
-
-        let td_FirstName = document.createElement("td");
-        td_FirstName.textContent = footballer.firstName;
-        tr.appendChild(td_FirstName);
-
-        let td_LastName = document.createElement("td");
-        td_LastName.textContent = footballer.lastName;
-        tr.appendChild(td_LastName);
-
-        let td_Gender = document.createElement("td");
-        td_Gender.textContent = footballer.gender;
-        tr.appendChild(td_Gender);
-
-        let td_Birthday = document.createElement("td");
-        td_Birthday.textContent = footballer.birthday;
-        tr.appendChild(td_Birthday);
-
-        let td_TeamName = document.createElement("td");
-        td_TeamName.textContent = footballer.teamName;
-        tr.appendChild(td_TeamName);
-
-        let td_Country = document.createElement("td");
-        td_Country.textContent = footballer.country;
-        tr.appendChild(td_Country);
-
+        tr.id = footballer.id
+          for (let index = 1; index < val.length; ++index) {
+            let td = document.createElement("td");
+            td.textContent = val[index];
+            tr.appendChild(td);
+        }
+        let td_button = document.createElement("td");
         let a_button = document.createElement("a");
         a_button.className = "btn btn-primary";
         a_button.href = `/footballers/edit/${footballer.id}`;
         a_button.textContent = "Править";
+        td_button.appendChild(a_button);
+        tr.appendChild(td_button);
+        document.getElementById("tbody-of-footballers").appendChild(tr);
+    });
+
+    hubConnection.on("ReceiveEdit", function (footballer) {
+        footballer.birthday = footballer.birthday.split('-').reverse().join('.')
+        let val = Object.values(footballer);
+        let tr = document.createElement("tr");
+        tr.id = footballer.id
+        for (let index = 1; index < val.length; ++index) {
+            let td = document.createElement("td");
+            td.textContent = val[index];
+            tr.appendChild(td);
+        }
         let td_button = document.createElement("td");
+        let a_button = document.createElement("a");
+        a_button.className = "btn btn-primary";
+        a_button.href = `/footballers/edit/${footballer.id}`;
+        a_button.textContent = "Править";
         td_button.appendChild(a_button);
         tr.appendChild(td_button);
 
-        document.getElementById("test1").appendChild(tr);
+        document.getElementById(footballer.id).replaceWith(tr);
+    });
+
+    hubConnection.on("ReceiveDelete", function (id) {
+        document.getElementById(id).remove();
     });
 </script>
 

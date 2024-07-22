@@ -44,11 +44,12 @@
         <div class="dropdown">
             <input type="text" asp-for="TeamName" />
             <select onchange="this.previousElementSibling.value=this.value; this.previousElementSibling.focus()">
+                <option hidden></option>
                 @if (@TeamNames is not null)
                     @foreach (string el in @TeamNames)
                     {
-                        <option selected>@el</option>
-                    }
+                        <option>@el</option>
+}
             </select>
         </div>
         <span asp-validation-for="TeamName"></span>
