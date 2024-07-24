@@ -8,7 +8,7 @@ namespace Footballers_v2.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
-            
+        
         }
 
         public DbSet<Footballer> Footballers { get; set; }

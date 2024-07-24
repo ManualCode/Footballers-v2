@@ -9,6 +9,6 @@ namespace Footballers_v2.Enums
         [Display(Name = "США")]
         США,
         [Display(Name = "Италия")]
-        Италия,
+        Италия
     }
 }

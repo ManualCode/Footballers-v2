@@ -29,7 +29,7 @@ body {
     display: flex;
 }
 
-.el {
+.form-element {
     display: grid;
     width: 400px;
 }

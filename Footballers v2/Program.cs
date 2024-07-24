@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//SIGNAL R
+//SIGNALR
 builder.Services.AddSignalR();
 
 builder.Services.AddControllersWithViews();
@@ -24,7 +24,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-
+//SIGNALR PATH
 app.MapHub<FootballersHub>("/football");
 
 app.UseRouting();

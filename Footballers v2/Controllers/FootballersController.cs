@@ -24,7 +24,7 @@ namespace Footballers_v2.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(AddFootballerViewModel viewModel)
+        public async Task<IActionResult> Add(Footballer viewModel)
         {
             if (!ModelState.IsValid) 
             {
@@ -74,7 +74,9 @@ namespace Footballers_v2.Controllers
                 .Select(x => x.TeamName).Distinct().ToListAsync();
                 return View(viewModel);
             }
+
             var footballer = await dbContext.Footballers.FindAsync(viewModel.Id);
+            
             if (footballer is not null)
             {
                 footballer.FirstName = viewModel.FirstName;
@@ -84,16 +86,18 @@ namespace Footballers_v2.Controllers
                 footballer.TeamName = viewModel.TeamName;
                 footballer.Country = ((Country)int.Parse(viewModel.Country)).ToString();
 
-
                 await dbContext.SaveChangesAsync();
             }
+
             return RedirectToAction("List", "Footballers");
         }
 
         [HttpPost]
         public async Task<IActionResult> Delete(Footballer viewModel)
         {
-            var footballer = await dbContext.Footballers.AsNoTracking().FirstOrDefaultAsync(x => x.Id == viewModel.Id);
+            var footballer = await dbContext.Footballers
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == viewModel.Id);
             
             if (footballer is not null)
             {
