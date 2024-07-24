@@ -51,7 +51,9 @@ else
         <span asp-validation-for="TeamName"></span>
 
         <label asp-for="Country"></label>
-        <select asp-for="Country" asp-items="@Html.GetEnumSelectList(typeof(Country))"></select>
+        <select asp-for="Country" asp-items="@Html.GetEnumSelectList(typeof(Country))">
+            <option hidden selected>@Model.Country</option>
+        </select>
         <span asp-validation-for="Country"></span>
 
         <input class="btn btn-primary" id="sendBtn" type="submit" value="Отправить" />

@@ -79,7 +79,7 @@
             country: document.querySelector("select[name='Country']").value
         };
 
-        hubConnection.invoke("Send", formData)
+        hubConnection.invoke("Sender", formData)
             .catch(function (err) {
                 return console.error(err.toString());
             });

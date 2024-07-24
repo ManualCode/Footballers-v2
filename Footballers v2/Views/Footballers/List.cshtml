@@ -86,6 +86,10 @@
     hubConnection.on("ReceiveDelete", function (id) {
         document.getElementById(id).remove();
     });
+
+    if (performance.navigation.type == 2) {
+        location.reload(true);
+    }
 </script>
 
 
