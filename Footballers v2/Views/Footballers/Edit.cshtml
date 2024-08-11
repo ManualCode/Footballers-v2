@@ -2,7 +2,8 @@
 @model Footballer
 @{ var TeamNames = @ViewData["ListTeamNames"] as List<string>;}
 
-<h1>Edit Footballer</h1>
+<h1>Исправь данные футболиста</h1>
+<p>На этой странице вы можете исправить либо удалить данные.</p>
 
 
 @if (Model is null)
@@ -47,7 +48,7 @@ else
             <input type="text" asp-for="TeamName" />
             <select onchange="this.previousElementSibling.value=this.value; this.previousElementSibling.focus()">
                 @if (@TeamNames is not null)
-                    @foreach (string el in @TeamNames) {<option>@el</option>}
+                    @foreach (string teamName in @TeamNames) {<option>@teamName</option>}
             </select>
         </div>
         <span asp-validation-for="TeamName"></span>
